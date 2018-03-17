@@ -1,14 +1,14 @@
 // Set sensor pins
-int trigPin = 13; // sensor Trig pin => Arduino pin 13
-int echoPin = 11;  // sensor Echo pin => Arduino pin 11
+const int trigPin = 13; // sensor Trig pin => Arduino pin 13
+const int echoPin = 11; // sensor Echo pin => Arduino pin 11
 
 // Constants
 const float offset = 0; // error compensation (mm)
+const float mach1 = 343; // speed of sound in m/s
 
 // Init vars
 float pingTime; // ping time (sensor => target => sensor)
 float distance; // distance to target in mm
-float mach1 = 343; // speed of sound in m/s
 
 void setup() {
 	// Set pinModes
