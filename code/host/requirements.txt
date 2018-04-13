@@ -1,0 +1,2 @@
+appjar
+pyserial
