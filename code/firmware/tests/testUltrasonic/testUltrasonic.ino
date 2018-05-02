@@ -1,6 +1,6 @@
 // Set sensor pins
-const int trigPin = 13; // sensor Trig pin => Arduino pin 13
-const int echoPin = 11; // sensor Echo pin => Arduino pin 11
+const int trigPin = A0;
+const int echoPin = A1;
 
 // Constants
 const float offset = 0; // error compensation (mm)
@@ -21,22 +21,17 @@ void setup() {
 void loop() {
 	// Reset trigger
 	digitalWrite(trigPin, LOW);
-	delayMicroseconds(2000);
+	delayMicroseconds(2);
 
 	// Trigger a ping
 	digitalWrite(trigPin, HIGH);
-	delayMicroseconds(15);
-	digitalWrite(trigPin, LOW);
 	delayMicroseconds(10);
+	digitalWrite(trigPin, LOW);
 
 	// Read pingTime & calc distance
-	pingTime = pulseIn(echoPin, HIGH) / 1000000; // read pingTime(us) => secs (1M us/sec)
-	distance = (mach1 * pingTime) / 2; // calc distance(m) (ping dist / 2 = actual dist)
-	distance *= 1000; // convert distance(m) => mm (1K mm/m)
-	distance += offset; // compensate for error
+	pingTime = pulseIn(echoPin, HIGH); // read pingTime(us) => secs (1M us/sec)
+	distance = pingTime*0.343/2; // compensate for error
 
 	// Print distance(mm) over serial console
-	Serial.print("Distance: ");
-	Serial.print(distance);
-	Serial.println("mm");
+	Serial.println(distance);
 }

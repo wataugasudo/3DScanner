@@ -7,8 +7,12 @@ rawFile = ""
 xyzFile = ""
 ser = serial.Serial()
 
+def updateStatus(status="Ready"):
+    # updates the text status @ GUI bottom
+    app.setLabel("status", status)
+
 def updateMeter(percentComplete=0):
-    # updates the status bar @ GUI bottom
+    # updates the progress bar @ GUI bottom (0 to 100%)
     app.setMeter("progress", percentComplete)
 
 # GUI Button Functions
@@ -59,6 +63,7 @@ def writeXYZ():##
 
 # GUI (main loop wrapper)
 with gui("TTFS Scanner Host", bg="white", font={"size":12}, padding=10, inPadding=10) as app:
+    app.setIcon("ttfs.gif")
     with app.frame("INTERFACE", row=0, column=0, sticky="NESW", stretch="BOTH"):
         with app.frame("LEFT", row=0, column=0, sticky="NESW", padding=10):
             app.startLabelFrame("Serial \u27a1 Raw")
@@ -78,6 +83,7 @@ with gui("TTFS Scanner Host", bg="white", font={"size":12}, padding=10, inPaddin
             app.stopLabelFrame()
 
     with app.frame("STATUS", row=1, column=0, colspan=2):
+        app.addLabel("status", "Ready")
         app.addMeter("progress")
         app.setMeterFill("progress", "green")
         app.setMeter("progress", 75)

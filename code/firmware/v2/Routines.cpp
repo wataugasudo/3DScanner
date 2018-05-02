@@ -1,15 +1,11 @@
 #include "Arduino.h"
 #include "libs/AccelStepper/AccelStepper.h"
 
-// Pins (use AccelStepper constructors to swap other pins/drivers)
+// Misc Pins
 const byte Z_EN = 8;
 //const byte Z_HOME = ?; // limit switch
-const byte H_TRIG = A8;
-const byte H_ECHO = A9;
-//const byte V_TRIG = ?; //
-//const byte V_ECHO = ?; //
 
-// Constants
+// Motion Constants
 const float R_SPEED = 500.0;
 const float Z_HOME_SPEED = 1000;
 const float Z_SPEED = 500.0;
@@ -23,12 +19,12 @@ AccelStepper mtrR(AccelStepper::HALF4WIRE, 2, 4, 3, 5); // turntable stepper
 // Init 17HS13-0404S stepper w/ A4988 driver (2wire, STEP, DIR) [VREF = 320mV]
 AccelStepper mtrZ(AccelStepper::DRIVER, 9, 10); // z-axis stepper
 
+// Init HC-SR04 Ultrasonic sensors (trig, echo)
+Ultrasonic probeH(A8, A9);
+//Ultrasonic probeV(A_, A_);
+
 void scannerSetup() {
     pinMode(Z_EN, OUTPUT);
-    pinMode(H_TRIG, OUTPUT);
-	pinMode(H_ECHO, INPUT);
-    //pinMode(V_TRIG, OUTPUT); //
-    //pinMode(V_ECHO, INPUT); //
 }
 
 void setZEnabled(bool enableZ) {
@@ -48,10 +44,7 @@ void scan() {
 
 }
 
-void
-
 void setup() {
-
     // setup R for const speed
     mtrR.setMaxSpeed(R_SPEED);
     mtrR.setSpeed(R_SPEED);
