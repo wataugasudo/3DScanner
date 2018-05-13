@@ -1,13 +1,14 @@
+// #include "libs/LiquidCrystal/src/LiquidCrystal.h"
+// #include "libs/LiquidMenu/src/LiquidMenu.h"
+// #include "libs/TimerOne/TimerOne.h"
+// #include "libs/ClickEncoder/ClickEncoder.h"
+
 #include <LiquidCrystal.h>
 #include <LiquidMenu.h>
 #include <TimerOne.h>
 #include <ClickEncoder.h>
 
 #define BAUD_RATE 9600
-
-// Init display w/ interface pin #s
-// (RS, EN, D4, D5, D6, D7)
-LiquidCrystal lcd(16, 17, 18, 19, 20, 21);
 
 // ClickEncoder defs
 ClickEncoder *encoder;
@@ -17,6 +18,9 @@ void timerIsr() {
     encoder->service();
 }
 
+// Init display w/ interface pin #s
+// (RS, EN, D4, D5, D6, D7)
+LiquidCrystal lcd(16, 17, 18, 19, 20, 21);
 // Welcome Screen
 LiquidLine welcome_line1(0, 0, "TTFS 3D Scanner");
 LiquidLine welcome_line2(8, 1, "Press ->");
@@ -27,8 +31,8 @@ LiquidLine home_line(1, 1, "Home Axes");
 LiquidScreen run_screen(scan_line, home_line);
 // Full Menu
 LiquidMenu menu(lcd, welcome_screen, run_screen);
-
-byte rightArrow[8] = { // right arrow LCD char for focus
+// Right arrow LCD char for focus
+byte rightArrow[8] = {
 	0b01000,
 	0b01100,
 	0b00110,
@@ -38,17 +42,6 @@ byte rightArrow[8] = { // right arrow LCD char for focus
 	0b01000,
 	0b00000
 };
-
-
-////////////////////////////////////////
-void scan() {
-    // Serial.println("scanning");
-}
-
-void home() {
-    // Serial.println("homing");
-}
-////////////////////////////////////////
 
 void setup() {
     // ClickEncoder setup
@@ -70,15 +63,15 @@ void setup() {
     oneFocused = true;
 
     // Attach scanner routines to run screen lines
-    scan_line.attach_function(1, scan);
-    home_line.attach_function(1, home);
+    scan_line.attach_function(1, Serial.println("Scanning")/**scan**/);
+    home_line.attach_function(1, Serial.println("Homing")/**home**/);
 
     Serial.begin(BAUD_RATE); // begin serial comms
     menu.switch_focus(); // align focus highlight w/ menu
 }
 
 void loop() {
-    // ClickEncoder Handler
+    // ClickEncoder Handler (scroll w/ turn & select w/ click)
     value += encoder->getValue();
     if (value != last) {
         if (value < last && !oneFocused) {
