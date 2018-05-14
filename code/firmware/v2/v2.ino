@@ -1,12 +1,7 @@
-// #include "libs/LiquidCrystal/src/LiquidCrystal.h"
-// #include "libs/LiquidMenu/src/LiquidMenu.h"
-// #include "libs/TimerOne/TimerOne.h"
-// #include "libs/ClickEncoder/ClickEncoder.h"
-
-#include <LiquidCrystal.h>
-#include <LiquidMenu.h>
-#include <TimerOne.h>
-#include <ClickEncoder.h>
+#include "src/LiquidCrystal/src/LiquidCrystal.h"
+#include "src/LiquidMenu/src/LiquidMenu.h"
+#include "src/TimerOne/TimerOne.h"
+#include "src/ClickEncoder/ClickEncoder.h"
 
 #define BAUD_RATE 9600
 
