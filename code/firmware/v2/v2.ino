@@ -1,14 +1,8 @@
-// #include "libs/LiquidCrystal/src/LiquidCrystal.h"
-// #include "libs/LiquidMenu/src/LiquidMenu.h"
-// #include "libs/TimerOne/TimerOne.h"
-// #include "libs/ClickEncoder/ClickEncoder.h"
-
 #include <LiquidCrystal.h>
 #include <LiquidMenu.h>
 #include <TimerOne.h>
 #include <ClickEncoder.h>
-
-#define BAUD_RATE 9600
+#include "Configuration.h"
 
 // ClickEncoder defs
 ClickEncoder *encoder;
@@ -20,9 +14,9 @@ void timerIsr() {
 
 // Init display w/ interface pin #s
 // (RS, EN, D4, D5, D6, D7)
-LiquidCrystal lcd(16, 17, 18, 19, 20, 21);
+LiquidCrystal lcd(LCD_RS, LCD_EN, LCD_D4, LCD_D5, LCD_D6, LCD_D7);
 // Welcome Screen
-LiquidLine welcome_line1(0, 0, "TTFS 3D Scanner");
+LiquidLine welcome_line1(0, 0, SCANNER_NAME);
 LiquidLine welcome_line2(8, 1, "Press ->");
 LiquidScreen welcome_screen(welcome_line1, welcome_line2);
 // Run Screen
@@ -43,9 +37,25 @@ byte rightArrow[8] = {
 	0b00000
 };
 
+//////////
+
+void scan() {
+    Serial.println("Scanning");
+    digitalWrite(LED_WORKING, HIGH);
+    digitalWrite(LED_READY, LOW);
+}
+
+void home() {
+    Serial.println("Homing");
+    digitalWrite(LED_READY, HIGH);
+    digitalWrite(LED_WORKING, LOW);
+}
+
+//////////
+
 void setup() {
     // ClickEncoder setup
-    encoder = new ClickEncoder(A2, A1, A0, 4);
+    encoder = new ClickEncoder(ENC_CLK, ENC_DT, ENC_SW, ENC_STEPS_PER_NOTCH);
     encoder->setAccelerationEnabled(false);
     Timer1.initialize(1000);
     Timer1.attachInterrupt(timerIsr);
@@ -63,11 +73,14 @@ void setup() {
     oneFocused = true;
 
     // Attach scanner routines to run screen lines
-    scan_line.attach_function(1, Serial.println("Scanning")/**scan**/);
-    home_line.attach_function(1, Serial.println("Homing")/**home**/);
+    scan_line.attach_function(1, scan);
+    home_line.attach_function(1, home);
 
     Serial.begin(BAUD_RATE); // begin serial comms
     menu.switch_focus(); // align focus highlight w/ menu
+
+    pinMode(LED_READY, OUTPUT);
+    pinMode(LED_WORKING, OUTPUT);
 }
 
 void loop() {

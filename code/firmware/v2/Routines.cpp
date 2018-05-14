@@ -1,28 +1,16 @@
 // #include "Arduino.h"
 // #include "libs/AccelStepper/src/AccelStepper.h"
 // #include "Ultrasonic.h"
+// #include "Configuration.h"
 //
-// // Misc Pins
-// const byte Z_EN = 8;
-// //const byte Z_HOME = ?; // limit switch
+// // Init turntable stepper (28BYJ-48 w/ ULN2003 driver)
+// AccelStepper mtrR(AccelStepper::HALF4WIRE, R_1, R_3, R_2, R_4);
+// // Init z-axis stepper (17HS13-0404S w/ A4988 driver [VREF = 320mV])
+// AccelStepper mtrZ(AccelStepper::DRIVER, Z_STEP, Z_DIR);
 //
-// // Motion Constants
-// const float R_SPEED = 500.0;
-// const float Z_HOME_SPEED = 1000;
-// const float Z_SPEED = 500.0;
-// const float Z_ACCEL = 1000.0;
-// const long Z_MAX = 10000;
-// // dist(mm) = ping(uS) * [1(s)/1M(uS)]*[343(m/s)]*[1000(mm/m)]*[1/2]
-// const float PING_US_TO_DIST_MM = 0.1715;
-//
-// // Init 28BYJ-48 stepper w/ ULN2003 driver (halfH-4wire, IN1, IN3, IN2, IN4)
-// AccelStepper mtrR(AccelStepper::HALF4WIRE, 2, 4, 3, 5); // turntable stepper
-// // Init 17HS13-0404S stepper w/ A4988 driver (2wire, STEP, DIR) [VREF = 320mV]
-// AccelStepper mtrZ(AccelStepper::DRIVER, 9, 10); // z-axis stepper
-//
-// // Init HC-SR04 Ultrasonic sensors (trig, echo)
-// Ultrasonic probeH(A8, A9);
-// //Ultrasonic probeV(A_, A_);
+// // Init HC-SR04 ultrasonic sensors
+// Ultrasonic probeH(H_TRIG, H_ECHO);
+// Ultrasonic probeV(V_TRIG, V_ECHO);
 //
 // void scannerSetup() {
 //     pinMode(Z_EN, OUTPUT);
