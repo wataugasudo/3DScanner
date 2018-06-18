@@ -2,7 +2,10 @@
 #include "src/LiquidMenu/src/LiquidMenu.h"
 #include "src/TimerOne/TimerOne.h"
 #include "src/ClickEncoder/ClickEncoder.h"
+#include "Routines.h"
 #include "Configuration.h"
+
+#ifndef DEMO_MODE // for normal mode
 
 // ClickEncoder defs
 ClickEncoder *encoder;
@@ -37,18 +40,18 @@ byte rightArrow[8] = {
 	0b00000
 };
 
+Routines routines;
+
 //////////
 
 void scan() {
     Serial.println("Scanning");
-    digitalWrite(LED_WORKING, HIGH);
-    digitalWrite(LED_READY, LOW);
+    routines.setLEDs(false, true, false);
 }
 
 void home() {
     Serial.println("Homing");
-    digitalWrite(LED_READY, HIGH);
-    digitalWrite(LED_WORKING, LOW);
+    routines.setLEDs(true, false, false);
 }
 
 //////////
@@ -78,9 +81,6 @@ void setup() {
 
     Serial.begin(BAUD_RATE); // begin serial comms
     menu.switch_focus(); // align focus highlight w/ menu
-
-    pinMode(LED_READY, OUTPUT);
-    pinMode(LED_WORKING, OUTPUT);
 }
 
 void loop() {
@@ -100,3 +100,40 @@ void loop() {
         menu.call_function(1);
     }
 }
+
+#else // for demo mode
+
+LiquidCrystal lcd(LCD_RS, LCD_EN, LCD_D4, LCD_D5, LCD_D6, LCD_D7);
+Routines routines;
+
+void setup() {
+    lcd.begin(16, 2);
+    lcd.noCursor();
+}
+
+void loop() {
+    lcd.setCursor(0, 0);
+    lcd.print("3D Scanner Demo");
+    routines.setLEDs(true, false, false);
+    delay(1000);
+    lcd.setCursor(0, 1);
+    lcd.print("Homing...");
+    routines.home();
+    lcd.setCursor(0, 0);
+    while (routines.getZ() <= Z_MAX_UNITS) {
+        lcd.clear();
+        lcd.print("Scanning (DEMO)");
+        lcd.setCursor(0, 1);
+        lcd.print("H:");
+        lcd.print(routines.readH());
+        lcd.print(" V:");
+        lcd.print(routines.readV());
+        routines.step();
+    }
+    lcd.setCursor(0, 1);
+    lcd.print("Scan Complete");
+    routines.setLEDs(false, false, true);
+    delay(3000);
+}
+
+#endif
