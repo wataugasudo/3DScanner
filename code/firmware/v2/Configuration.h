@@ -29,10 +29,10 @@ NOTES:
 
 #define R_SPEED 500.0
 #define R_ACCEL 1000.0
-#define Z_HOME_SPEED 1000.0
-#define Z_SPEED -500.0
-#define Z_ACCEL 1000.0
-#define Z_MAX_UNITS 250
+#define Z_HOME_SPEED 750.0
+#define Z_SPEED 500.0
+#define Z_ACCEL 1500.0
+#define Z_MAX_UNITS 160
 
 ////////// CALIBRATION //////////
 
@@ -41,17 +41,17 @@ NOTES:
 #define R_STEPS_PER_REV 4076 // 4075.7728 is exact value
 
 // Ultrasonic
-#define H_MAX_PING 10000
-#define H_RAW_LOW 0
-#define H_RAW_HIGH 100
-#define H_CAL_LOW 0
-#define H_CAL_HIGH 100
+#define H_MAX_PING 2000
+#define H_RAW_LOW 330
+#define H_RAW_HIGH 810
+#define H_CAL_LOW 60
+#define H_CAL_HIGH 150
 
-#define V_MAX_PING 10000
-#define V_RAW_LOW 0
-#define V_RAW_HIGH 100
-#define V_CAL_LOW 0
-#define V_CAL_HIGH 100
+#define V_MAX_PING 2000
+#define V_RAW_LOW 330
+#define V_RAW_HIGH 810
+#define V_CAL_LOW 60
+#define V_CAL_HIGH 150
 
 // Click Encoder
 #define ENC_STEPS_PER_NOTCH 4

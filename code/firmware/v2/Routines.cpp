@@ -21,7 +21,7 @@ mtrZ(AccelStepper::DRIVER, Z_STEP, Z_DIR) { // Construct z-axis stepper (17HS13-
     // Setup Z
     pinMode(Z_EN, OUTPUT);
     pinMode(Z_HOME, INPUT_PULLUP);
-    mtrZ.setMaxSpeed((Z_SPEED > Z_HOME_SPEED ? Z_SPEED : Z_HOME_SPEED));
+    //mtrZ.setMaxSpeed((Z_SPEED > Z_HOME_SPEED ? Z_SPEED : Z_HOME_SPEED));
     mtrZ.setAcceleration(Z_ACCEL);
 }
 
@@ -29,12 +29,13 @@ mtrZ(AccelStepper::DRIVER, Z_STEP, Z_DIR) { // Construct z-axis stepper (17HS13-
 void Routines::home() {
     setLEDs(false, true, false);
     setZEnabled(true);
+    mtrZ.setMaxSpeed(Z_HOME_SPEED);
     mtrZ.setSpeed(Z_HOME_SPEED);
     while(digitalRead(Z_HOME)) {
         mtrZ.runSpeed();
     }
-    mtrZ.stop();
-    mtrZ.runToPosition();
+    mtrZ.setSpeed(0);
+    mtrZ.runSpeed();
     setZEnabled(false);
     zPos = 0;
     rPos = 0;
@@ -51,7 +52,8 @@ void Routines::step() {
         rPos = 0;
         zPos += Z_UNITS_PER_READ;
         setZEnabled(true);
-        mtrZ.move(Z_STEPS_PER_READ);
+        mtrZ.setMaxSpeed(Z_SPEED);
+        mtrZ.move(-Z_STEPS_PER_READ);
         mtrZ.runToPosition();
         setZEnabled(false);
     }

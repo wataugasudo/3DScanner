@@ -119,14 +119,21 @@ void loop() {
     lcd.setCursor(0, 1);
     lcd.print("Homing...");
     routines.home();
-    lcd.setCursor(0, 0);
+    delay(1000);
     while (routines.getZ() <= Z_MAX_UNITS) {
+        routines.setLEDs(false, true, false);
         lcd.clear();
-        lcd.print("Scanning (DEMO)");
+        lcd.setCursor(0, 0);
+        lcd.print("Z:");
+        lcd.print(routines.getZ());
+        lcd.setCursor(8, 0);
+        lcd.print("R:");
+        lcd.print(routines.getR());
         lcd.setCursor(0, 1);
         lcd.print("H:");
         lcd.print(routines.readH());
-        lcd.print(" V:");
+        lcd.setCursor(8, 1);
+        lcd.print("V:");
         lcd.print(routines.readV());
         routines.step();
     }
